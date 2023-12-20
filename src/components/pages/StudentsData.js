@@ -27,15 +27,14 @@ function StudentsData() {
   }
   return (
     <div>
-      <div>
-        <Sidebar style={{ height: "100%", position:"absolute"}}>
+      <div style={{backgroundColor:"#82001a"}}>
+        <Sidebar style={{height: "100%", position:"absolute"}}>
         <main>
           <Menu>
               <MenuItem>
                 <div
                   style={{
                     padding: "9px",
-                    // textTransform: "uppercase",
                     fontWeight: "bold",
                     fontSize: 14,
                     letterSpacing: "1px"
@@ -97,6 +96,7 @@ function StudentsData() {
           <thead>
             <tr>
               <th scope="col">S.No</th>
+              <th scope="col"></th>
               <th scope="col">Name</th>
               <th scope="col">Roll No.</th>
             </tr>
@@ -105,6 +105,7 @@ function StudentsData() {
             {studentsData?.map((student, index) =>
               <tr>
                 <th scope="row">{index + 1}</th>
+                <td><img src={`https://automation.vnrvjiet.ac.in/eduprime3/Docs/VNRVJIET/User/${student?.rollno}.jpg`} alt={student?.rollno} className="w-25"></img></td>
                 <td>{student?.name}</td>
                 <td>{student?.rollno}</td>
               </tr>

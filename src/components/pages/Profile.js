@@ -66,9 +66,9 @@ function Profile() {
               <MDBCard className="mb-4">
                 <MDBCardBody className="text-center">
                   <MDBCardImage
-                    src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-chat/ava3.webp"
+                    src={`https://automation.vnrvjiet.ac.in/eduprime3/Docs/VNRVJIET/User/${userdetails?.rollno}.jpg`}
                     alt="avatar"
-                    className="rounded-circle"
+                    className="rounded"
                     style={{ width: '150px' }}
                     fluid />
                 </MDBCardBody>
