@@ -6,6 +6,7 @@ import {
   RiFolder2Line,
   RiStackLine,
 } from "react-icons/ri";
+import { FaLinkedin } from "react-icons/fa";
 import { onValue, ref } from 'firebase/database';
 import { useNavigate } from "react-router-dom";
 import { realtimedb } from '../../firebaseconfig'
@@ -18,17 +19,26 @@ import {
 } from "react-pro-sidebar";
 function StudentsData() {
   let [studentsData, setStudentsData] = useState()
+  let [facultyData,setFacultyData] = useState();
   const navigate = useNavigate()
   const getSecttionData = (section) => {
     const reference = ref(realtimedb, "students/departments/" + section)
     onValue(reference, (snapshot) => {
       setStudentsData(snapshot.val())
+      setFacultyData()
+    })
+  }
+  const getFacultyData = (section) => {
+    const reference = ref(realtimedb, "faculty/faculty/departments/"+ section)
+    onValue(reference, (snapshot) => {
+      setFacultyData(snapshot.val())
+      setStudentsData()
     })
   }
   return (
     <div>
       <div style={{backgroundColor:"#82001a"}}>
-        <Sidebar style={{height: "100%", position:"absolute"}}>
+        <Sidebar style={{height: "100%", position:"absolute",backgroundColor:"#82001a"}}>
         <main>
           <Menu>
               <MenuItem>
@@ -86,13 +96,22 @@ function StudentsData() {
                 <MenuItem onClick={() => getSecttionData("/7/section/C")} icon={<RiStackLine />}>Section C</MenuItem>
               </SubMenu>
             </SubMenu>
+            <SubMenu label={"Faculty"} icon={<RiTeamLine />}>
+            <MenuItem onClick={() => getFacultyData("/0")} icon={<RiStackLine />}>IT</MenuItem>
+            <MenuItem onClick={() => getFacultyData("/1")} icon={<RiStackLine />}>CSE</MenuItem>
+            <MenuItem onClick={() => getFacultyData("/2")} icon={<RiStackLine />}>ECE</MenuItem>
+            <MenuItem onClick={() => getFacultyData("/3")} icon={<RiStackLine />}>Mech</MenuItem>
+            <MenuItem onClick={() => getFacultyData("/4")} icon={<RiStackLine />}>Civil</MenuItem>
+            <MenuItem onClick={() => getFacultyData("/5")} icon={<RiStackLine />}>EEE</MenuItem>
+            <MenuItem onClick={() => getFacultyData("/6")} icon={<RiStackLine />}>CSBS</MenuItem>
+            <MenuItem onClick={() => getFacultyData("/7")} icon={<RiStackLine />}>AIML</MenuItem>
+            </SubMenu>
           </Menu>
         </main>
       </Sidebar>
       </div>
-      <div className="container mygrid" style={{display: 'grid', gridTemplateColumns: '20vw auto'}}>
-          <div></div>
-          {studentsData ? <table className="table table-striped">
+      <div className="container mygrid">
+          {studentsData ? <table className="table table-bordered table-striped">
           <thead>
             <tr>
               <th scope="col">S.No</th>
@@ -103,16 +122,47 @@ function StudentsData() {
           </thead>
           <tbody>
             {studentsData?.map((student, index) =>
-              <tr>
+              <tr key={student?.rollno}>
                 <th scope="row">{index + 1}</th>
-                <td><img src={`https://automation.vnrvjiet.ac.in/eduprime3/Docs/VNRVJIET/User/${student?.rollno}.jpg`} alt={student?.rollno} className="w-25"></img></td>
+                <td><img src={`https://automation.vnrvjiet.ac.in/eduprime3/Docs/VNRVJIET/User/${student?.rollno}.jpg`} alt={student?.rollno} className="studentimage"></img></td>
                 <td>{student?.name}</td>
                 <td>{student?.rollno}</td>
               </tr>
             )}
           </tbody>
         </table>
-       : <img className="d-block m-auto my-5" src="https://upload.wikimedia.org/wikipedia/en/4/47/VNRVJIETLogo.png" alt="logo"></img>}
+       : facultyData ? <table className="table table-bordered table-striped">
+       <thead>
+         <tr>
+           <th scope="col">S.No</th>
+           <th scope="col">Name of Faculty</th>
+           <th scope="col">Desigantion</th>
+           <th scope="col">Profiles</th>
+           <th scope="col">Date Of Joining</th>
+           <th scope="col">Qualification</th>
+           <th scope="col">Nature Of Association</th>
+           <th scope="col">Email</th>
+           <th scope="col">JNTUH - ID</th>  
+         </tr>
+       </thead>
+       <tbody>
+         {facultyData?.teachers?.map((faculty,index) =>
+           <tr key={index+1}>
+             <th scope="row">{faculty?.sno}</th>
+             <td>{faculty?.name}</td>
+             <td>{faculty?.designation}</td>
+             <td><a href={faculty?.profiles}><FaLinkedin /></a></td>
+             <td>{faculty?.doj}</td>
+             <td>{faculty?.qualification}</td>
+             <td>{faculty?.noa}</td>
+             <td>{faculty?.email}</td>
+             <td>{faculty?.jntuid}</td>
+           </tr>
+         )}
+       </tbody>
+     </table> :<img className="d-block m-auto logo" src="https://upload.wikimedia.org/wikipedia/en/4/47/VNRVJIETLogo.png" alt="logo"></img>}
+       {console.table(studentsData)}
+       {console.table(facultyData)}
        </div>
     </div>
   );
